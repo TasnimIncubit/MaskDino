@@ -1,0 +1,38 @@
+Install and run inference on ADE20K:
+git clone https://github.com/IDEA-Research/MaskDINO.git
+cd /home/tasnim/MaskDINO
+conda create --name maskdino python=3.8 -y
+conda activate maskdino
+conda install pytorch==1.9.0 torchvision==0.10.0 cudatoolkit=11.1 -c pytorch -c nvidia
+pip install -U opencv-python
+git clone https://github.com/facebookresearch/detectron2.git
+cd detectron2
+pip install -e .
+cd ..
+pip install -r requirements.txt
+cd maskdino/modeling/pixel_decoder/ops
+sh make.sh
+
+prepare dataset:
+wget http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip
+unzip /home/tasnim/MaskDINO/ADEChallengeData2016.zip -d /home/tasnim/MaskDINO/datasets/
+wget http://sceneparsing.csail.mit.edu/data/ChallengeData2017/annotations_instance.tar
+tar -C /home/tasnim/MaskDINO/datasets/ADEChallengeData2016 -xvf /home/tasnim/MaskDINO/annotations_instance.tar
+python datasets/prepare_ade20k_sem_seg.py
+
+
+Download 
+maskdino_r50_50ep_100q_celoss_hid1024_3s_semantic_ade20k_48.7miou
+
+Run inference:
+python train_net.py --eval-only --num-gpus 1 --config-file /home/tasnim/MaskDINO/configs/ade20k/semantic-segmentation/maskdino_R50_bs16_160k_steplr.yaml MODEL.WEIGHTS /home/tasnim/MaskDINO/maskdino_r50_50ep_100q_celoss_hid1024_3s_semantic_ade20k_48.7miou.pth
+visualize output 
+cd demo
+python demo.py --config-file /home/tasnim/MaskDINO/configs/ade20k/semantic-segmentation/maskdino_R50_bs16_160k_steplr.yaml --input /home/tasnim/MaskDINO/datasets/ADEChallengeData2016/images/validation/*.jpg --output /home/tasnim/MaskDINO/demo/demo_output --opts MODEL.WEIGHTS /home/tasnim/MaskDINO/maskdino_r50_50ep_100q_celoss_hid1024_3s_semantic_ade20k_48.7miou.pth
+
+Running the training semseg model on ADE20K:
+python train_net.py --config-file /home/tasnim/MaskDINO/configs/ade20k/semantic-segmentation/maskdino_R50_bs16_160k_steplr.yaml --num-gpus 1 SOLVER.IMS_PER_BATCH 2 SOLVER.BASE_LR 0.0025
+
+
+
+

@@ -51,3 +51,4 @@ _darcs
 /projects/*/datasets
 /models
 /snippet
+/maskdino_r50_50ep_100q_celoss_hid1024_3s_semantic_ade20k_48.7miou.pth

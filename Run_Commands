@@ -33,6 +33,5 @@ python demo.py --config-file /home/tasnim/MaskDINO/configs/ade20k/semantic-segme
 Running the training semseg model on ADE20K:
 python train_net.py --config-file /home/tasnim/MaskDINO/configs/ade20k/semantic-segmentation/maskdino_R50_bs16_160k_steplr.yaml --num-gpus 1 SOLVER.IMS_PER_BATCH 2 SOLVER.BASE_LR 0.0025
 
-
-
-
+Custom_dataloader:
+python custom_dataloader.py --config-file /home/tasnim/MaskDINO/configs/ade20k/semantic-segmentation/maskdino_R50_bs16_160k_steplr.yaml --num-gpus 1 SOLVER.IMS_PER_BATCH 2 SOLVER.BASE_LR 0.0025
